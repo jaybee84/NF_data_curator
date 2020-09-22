@@ -211,19 +211,17 @@ server <- function(input, output, session) {
   ### synapse cookies
   session$sendCustomMessage(type = "readCookie", message = list())
 
-  w_login <- Waiter$new()
+  screen <- div(
+    style="color:red;",
+    spin_3(),
+    h3("logging in...")
+  )
+  
+  w_login <- Waiter$new(html = screen)
+  
   ### initial login front page items
   observeEvent(input$cookie, {
     w_login$show()
-    
-    screen <- div(
-      style="color:red;",
-      spin_3(),
-      h3("logging in...")
-    )
-
-    
-    w_login$update(html = screen)
      
     ### logs in 
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
@@ -231,9 +229,11 @@ server <- function(input, output, session) {
     login_msg <- sprintf("welcome, %s !", syn_getUserProfile()$userName)
     
     w_login$update(html = div(
+      style="color:red;",
       spin_3(),
       h3(login_msg)
-    ))
+    )
+    )
 
     ### updating global vars with values for projects
     synStore_obj <<- syn_store("syn16858331", token = input$cookie)
