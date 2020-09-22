@@ -73,7 +73,7 @@ ui <- dashboardPage(
     use_notiflix_report(), 
     use_waiter(),
     waiter_show_on_load(html = tagList(
-      tags$style="color:white;",
+      tags$style("color:white;"),
       spin_heartbeat(),
       h3("logging in...")
     )),
@@ -226,7 +226,7 @@ server <- function(input, output, session) {
     login_msg <- sprintf("welcome, %s !", syn_getUserProfile()$userName)
     
     waiter::waiter_update(html = tagList(
-      style="color:white;",
+      tags$style("color:white;"),
       spin_heartbeat(),
       h3(login_msg)
     ))
@@ -236,7 +236,7 @@ server <- function(input, output, session) {
 
     # get_projects_list(synStore_obj)
     waiter::waiter_update(html = tagList(
-      tags$style="color:white;",
+      tags$style("color:white;"),
       spin_heartbeat(),
       h3("retrieving projects...")
     ))
