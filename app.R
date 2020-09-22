@@ -76,7 +76,7 @@ ui <- dashboardPage(
       style="color:white;",
       spin_heartbeat(),
       h3("logging in...")
-    ))),
+    )),
     tabItems(
       # First tab content
       tabItem(tabName = "instructions",
