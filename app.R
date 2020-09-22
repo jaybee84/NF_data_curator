@@ -74,8 +74,7 @@ ui <- dashboardPage(
     use_waiter(),
     waiter_show_on_load(html = span(
       style="color:white;",
-      spin_heartbeat(),
-      h3("logging in...")
+      spin_heartbeat()
     )),
     tabItems(
       # First tab content
@@ -225,16 +224,15 @@ server <- function(input, output, session) {
     waiter::waiter_show(html = span(
       style="color:white;",
       spin_heartbeat(),
-      h3(login_msg)
+      h3("logging in...")
     ))
     ### logs in 
     
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
-    
     login_msg <- sprintf("welcome, %s !", syn_getUserProfile()$userName)
     
-    
-    waiter::waiter_update(html = span(
+    waiter::waiter_hide()
+    waiter::waiter_show(html = span(
       style="color:white;",
       spin_heartbeat(),
       h3(login_msg)
