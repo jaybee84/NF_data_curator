@@ -11,6 +11,7 @@ library(ggplot2)
 library(purrr)
 library(plotly)
 library(shinypop)
+library(waiter)
 
 #########global
 use_condaenv('data_curator_env', required = TRUE)
@@ -26,6 +27,7 @@ source_python("metadataModelFuns.py")
 #########
 
 ui <- dashboardPage(
+  use_waiter(),
   skin = "green",
   dashboardHeader(
     titleWidth = 250,
@@ -176,6 +178,7 @@ ui <- dashboardPage(
 
 server <- function(input, output, session) {
   ## Show message if user is not logged in to synapse
+  
   unauthorized <- observeEvent(input$authorized, {
     showModal(
       modalDialog(
@@ -209,9 +212,12 @@ server <- function(input, output, session) {
   ### synapse cookies
   session$sendCustomMessage(type = "readCookie", message = list())
 
+  w_login <- Waiter$new()
   ### initial login front page items
   observeEvent(input$cookie, {
-    showNotification(id = "processing", "Please wait while we log you in...", duration = NULL, type = "warning")
+    w$show()
+
+    # showNotification(id = "processing", "Please wait while we log you in...", duration = NULL, type = "warning")
 
     ### logs in 
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
@@ -219,6 +225,7 @@ server <- function(input, output, session) {
     ### welcome message
     output$title <- renderUI({
       titlePanel(h4(sprintf("Welcome, %s", syn_getUserProfile()$userName)))
+      
     })
 
     ### updating global vars with values for projects
@@ -233,8 +240,10 @@ server <- function(input, output, session) {
 
     ### updates project dropdown
     updateSelectizeInput(session, 'var', choices = names(projects_namedList))
-    removeNotification(id = "processing",)
+    # removeNotification(id = "processing",)
 
+    w$hide()
+    
   })
 
 
