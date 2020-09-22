@@ -221,6 +221,8 @@ server <- function(input, output, session) {
   ### initial login front page items
   observeEvent(input$cookie, {
     ### logs in 
+    waiter::waiter_hide()
+    waiter::waiter_show(html = div('test'))
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
     
     login_msg <- sprintf("welcome, %s !", syn_getUserProfile()$userName)
