@@ -219,8 +219,7 @@ server <- function(input, output, session) {
 
   ### initial login front page items
   observeEvent(input$cookie, {
-    waiter::waiter_hide()
-    
+
     waiter::waiter_show(html = span(
       style="color:white;",
       spin_heartbeat(),
@@ -257,6 +256,7 @@ server <- function(input, output, session) {
     ### updates project dropdown
     updateSelectizeInput(session, 'var', choices = names(projects_namedList))
     
+    waiter::waiter_hide()
     waiter::waiter_hide()
    
   })
