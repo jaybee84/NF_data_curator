@@ -70,7 +70,6 @@ ui <- dashboardPage(
       singleton(
         includeScript("www/readCookie.js")
       )),
-    uiOutput("title"),
     use_notiflix_report(), 
     use_waiter(),
     tabItems(
@@ -216,22 +215,29 @@ server <- function(input, output, session) {
   ### initial login front page items
   observeEvent(input$cookie, {
     w_login$show()
-
-    # showNotification(id = "processing", "Please wait while we log you in...", duration = NULL, type = "warning")
-
+    w$update(html = div(
+      spin_3(),
+      h3("logging in...")
+      ))
     ### logs in 
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
-
-    ### welcome message
-    output$title <- renderUI({
-      titlePanel(h4(sprintf("Welcome, %s", syn_getUserProfile()$userName)))
-      
-    })
+    
+    login_msg <- sprintf("welcome, %s !", syn_getUserProfile()$userName)
+    
+    w_login$update(html = div(
+      spin_3(),
+      h3(login_msg)
+    ))
 
     ### updating global vars with values for projects
     synStore_obj <<- syn_store("syn16858331", token = input$cookie)
 
     # get_projects_list(synStore_obj)
+    w_login$update(html = div(
+      spin_3(),
+      h3("retrieving projects...")
+    ))  
+    
     projects_list <<- syn_store$getStorageProjects(synStore_obj)
 
     for (i in seq_along(projects_list)) {
@@ -240,7 +246,6 @@ server <- function(input, output, session) {
 
     ### updates project dropdown
     updateSelectizeInput(session, 'var', choices = names(projects_namedList))
-    # removeNotification(id = "processing",)
 
     w_login$hide()
     
