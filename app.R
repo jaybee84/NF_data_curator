@@ -72,6 +72,7 @@ ui <- dashboardPage(
       )),
     use_notiflix_report(), 
     use_waiter(),
+    waiter_show_on_load(spin_fading_circles()),
     tabItems(
       # First tab content
       tabItem(tabName = "instructions",
@@ -211,38 +212,37 @@ server <- function(input, output, session) {
   ### synapse cookies
   session$sendCustomMessage(type = "readCookie", message = list())
 
-  screen <- div(
-    style="color:red;",
-    spin_3(),
-    h3("logging in...")
-  )
-  
-  w_login <- Waiter$new(html = screen)
-  
+
+
   ### initial login front page items
   observeEvent(input$cookie, {
-    w_login$show()
-     
+
     ### logs in 
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
     
+    waiter::waiter_update(html = div(
+      style="color:red;",
+      spin_3(),
+      h3("logging in...")
+    ))
+    
     login_msg <- sprintf("welcome, %s !", syn_getUserProfile()$userName)
     
-    w_login$update(html = div(
+    waiter::waiter_update(html = div(
       style="color:red;",
       spin_3(),
       h3(login_msg)
-    )
-    )
+    ))
 
     ### updating global vars with values for projects
     synStore_obj <<- syn_store("syn16858331", token = input$cookie)
 
     # get_projects_list(synStore_obj)
-    w_login$update(html = div(
+    waiter::waiter_update(html = div(
+      style="color:red;",
       spin_3(),
       h3("retrieving projects...")
-    ))  
+    ))
     
     projects_list <<- syn_store$getStorageProjects(synStore_obj)
 
@@ -252,9 +252,9 @@ server <- function(input, output, session) {
 
     ### updates project dropdown
     updateSelectizeInput(session, 'var', choices = names(projects_namedList))
-
-    w_login$hide()
     
+    waiter::waiter_hide()
+   
   })
 
 
