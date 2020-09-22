@@ -72,7 +72,7 @@ ui <- dashboardPage(
       )),
     use_notiflix_report(), 
     use_waiter(),
-    waiter_show_on_load(html = div(
+    waiter_show_on_load(html = tagList(
       style="color:white;",
       spin_heartbeat(),
       h3("logging in...")
@@ -220,13 +220,12 @@ server <- function(input, output, session) {
 
   ### initial login front page items
   observeEvent(input$cookie, {
-
     ### logs in 
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
     
     login_msg <- sprintf("welcome, %s !", syn_getUserProfile()$userName)
     
-    waiter::waiter_update(html = div(
+    waiter::waiter_update(html = tagList(
       style="color:white;",
       spin_heartbeat(),
       h3(login_msg)
@@ -236,7 +235,7 @@ server <- function(input, output, session) {
     synStore_obj <<- syn_store("syn16858331", token = input$cookie)
 
     # get_projects_list(synStore_obj)
-    waiter::waiter_update(html = div(
+    waiter::waiter_update(html = tagList(
       style="color:white;",
       spin_heartbeat(),
       h3("retrieving projects...")
