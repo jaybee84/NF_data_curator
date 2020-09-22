@@ -215,7 +215,8 @@ server <- function(input, output, session) {
   ### initial login front page items
   observeEvent(input$cookie, {
     w_login$show()
-    w$update(html = div(
+    
+    w_login$update(html = div(
       spin_3(),
       h3("logging in...")
       ))
