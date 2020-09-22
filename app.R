@@ -27,7 +27,6 @@ source_python("metadataModelFuns.py")
 #########
 
 ui <- dashboardPage(
-  use_waiter(),
   skin = "green",
   dashboardHeader(
     titleWidth = 250,
@@ -73,6 +72,7 @@ ui <- dashboardPage(
       )),
     uiOutput("title"),
     use_notiflix_report(), 
+    use_waiter(),
     tabItems(
       # First tab content
       tabItem(tabName = "instructions",
