@@ -72,10 +72,7 @@ ui <- dashboardPage(
       )),
     use_notiflix_report(), 
     use_waiter(),
-    waiter_show_on_load(html = span(
-      style="color:white;",
-      spin_heartbeat()
-    )),
+    waiter_show_on_load(html = h3("")),
     tabItems(
       # First tab content
       tabItem(tabName = "instructions",
