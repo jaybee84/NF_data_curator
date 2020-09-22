@@ -216,10 +216,15 @@ server <- function(input, output, session) {
   observeEvent(input$cookie, {
     w_login$show()
     
-    w_login$update(html = div(
+    screen <- div(
+      style="color:red;",
       spin_3(),
       h3("logging in...")
-      ))
+    )
+
+    
+    w_login$update(html = screen)
+     
     ### logs in 
     syn_login(sessionToken = input$cookie, rememberMe = FALSE)
     
