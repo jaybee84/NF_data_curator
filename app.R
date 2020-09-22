@@ -215,7 +215,7 @@ server <- function(input, output, session) {
   w_login <- Waiter$new()
   ### initial login front page items
   observeEvent(input$cookie, {
-    w$show()
+    w_login$show()
 
     # showNotification(id = "processing", "Please wait while we log you in...", duration = NULL, type = "warning")
 
@@ -242,7 +242,7 @@ server <- function(input, output, session) {
     updateSelectizeInput(session, 'var', choices = names(projects_namedList))
     # removeNotification(id = "processing",)
 
-    w$hide()
+    w_login$hide()
     
   })
 
