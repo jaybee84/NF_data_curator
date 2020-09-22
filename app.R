@@ -70,8 +70,13 @@ ui <- dashboardPage(
       singleton(
         includeScript("www/readCookie.js")
       )),
-    use_notiflix_report(), 
     use_waiter(),
+    waiter::waiter_show_on_load(html = span(
+      style="color:white;",
+      spin_heartbeat(),
+      h3("logging in...")
+    )),
+    use_notiflix_report(), 
     tabItems(
       # First tab content
       tabItem(tabName = "instructions",
@@ -216,7 +221,7 @@ server <- function(input, output, session) {
   ### initial login front page items
   observeEvent(input$cookie, {
 
-    waiter::waiter_show(html = span(
+    waiter::waiter_update(html = span(
       style="color:white;",
       spin_heartbeat(),
       h3("logging in...")
